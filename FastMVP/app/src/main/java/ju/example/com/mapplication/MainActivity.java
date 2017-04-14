@@ -1,60 +1,70 @@
 package ju.example.com.mapplication;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import ju.example.com.mapplication.mvp.MVPBaseActivity;
+import com.zanlabs.widget.infiniteviewpager.InfiniteViewPager;
+import com.zanlabs.widget.infiniteviewpager.indicator.CirclePageIndicator;
+import com.zanlabs.widget.infiniteviewpager.indicator.LinePageIndicator;
 
-public class MainActivity extends MVPBaseActivity<MainContract.View, MainPresenter>implements MainContract.View {
+import java.util.ArrayList;
+import java.util.List;
+
+import ju.example.com.mapplication.viewpager.BannerPagerAdapter;
+
+
+public class MainActivity extends Activity {
+    private InfiniteViewPager infiniteViewPager;
+    private CirclePageIndicator circlePageIndicator;
+    private LinePageIndicator linePageIndicator;
+    private BannerPagerAdapter mAdapter;
+    private static final int DELAY_AUTO = 3000;
+    private static final int MIN_SCROLL_NUMBER = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Glide.with(this).load("https://i.ytimg.com/vi/fjImkK1xAZI/maxresdefault.jpg")
+//                .asBitmap().placeholder(R.mipmap.bg_default).error(R.mipmap.bad_default).into(mImageView);
+        infiniteViewPager = (InfiniteViewPager) findViewById(R.id.viewpager);
+//        circlePageIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+        linePageIndicator = (LinePageIndicator) findViewById(R.id.indicator);
+        Context ctx = this.getApplication();
+        mAdapter = new BannerPagerAdapter(ctx);
+        infiniteViewPager.setAdapter(mAdapter);
+        infiniteViewPager.setAutoScrollTime(DELAY_AUTO);
+        infiniteViewPager.startAutoScroll();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                mPresenter.requestNetWork();
-            }
-        });
+//        circlePageIndicator.setPageColor(Color.parseColor("#f2f2f2"));
+//        circlePageIndicator.setFillColor(Color.parseColor("#4bd4f7"));
+//        circlePageIndicator.setRadius(20f);
+//        circlePageIndicator.setViewPager(infiniteViewPager);
+//        circlePageIndicator.setSnap(true);
+
+        linePageIndicator.setSelectedColor(Color.parseColor("#4bd4f7"));
+        linePageIndicator.setUnselectedColor(Color.parseColor("#f2f2f2"));
+
+        //间隔
+        linePageIndicator.setGapWidth(30f);
+        //宽度
+        linePageIndicator.setLineWidth(60f);
+        //高度
+        linePageIndicator.setStrokeWidth(20f);
+        linePageIndicator.setViewPager(infiniteViewPager);
+
+        List<String> pics = new ArrayList<>();
+        pics.add("https://i.ytimg.com/vi/fjImkK1xAZI/maxresdefault.jpg");
+        pics.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1492160732747&di=475f03f5b60b7e60d9bbd81e61f6dd97&imgtype=0&src=http%3A%2F%2Fdingyue.nosdn.127.net%2FzLvZPWX%3DY%3DpRyGTK6WcYfP6GXjxhwYa7bNbzUUl5JqJOQ1489923107030.jpg");
+        pics.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1492160732747&di=a34dc088ac1a4a5657b0f346e8329c12&imgtype=0&src=http%3A%2F%2Fi.dimg.cc%2Fa7%2F9d%2F5a%2F26%2F52%2F77%2Fd3%2Ff0%2Fcd%2Fb4%2Ffa%2Fb2%2Ff8%2Fbf%2Fa6%2F83.jpg");
+        mAdapter.updateSectionItemContentList(pics);
+        infiniteViewPager.startAutoScroll();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void refreshView() {
-        Toast.makeText(this, "haha", Toast.LENGTH_SHORT).show();
-    }
+//    @Override
+//    public void refreshView() {
+//        Toast.makeText(this, "haha", Toast.LENGTH_SHORT).show();
+//    }
 }
